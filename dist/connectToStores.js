@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("react"));
+		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define(["react"], factory);
+		define([], factory);
 	else if(typeof exports === 'object')
-		exports["Alt"] = factory(require("react"));
+		exports["Alt"] = factory();
 	else
-		root["Alt"] = factory(root["react"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__) {
+		root["Alt"] = factory();
+})(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -52,112 +52,81 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(1);
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
+	import React from 'react';
+	import createReactClass from 'create-react-class';
 
 	// @todo Where to get these from?
-	var isFunction = function isFunction(x) {
-	  return typeof x === 'function';
-	};
-	var eachObject = function eachObject(f, o) {
-	  o.forEach(function (from) {
-	    Object.keys(Object(from)).forEach(function (key) {
+	const isFunction = x => typeof x === 'function';
+	const eachObject = (f, o) => {
+	  o.forEach(from => {
+	    Object.keys(Object(from)).forEach(key => {
 	      f(key, from[key]);
 	    });
 	  });
 	};
-	var assign = function assign(target) {
-	  for (var _len = arguments.length, source = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	    source[_key - 1] = arguments[_key];
-	  }
-
-	  eachObject(function (key, value) {
-	    return target[key] = value;
-	  }, source);
+	const assign = (target, ...source) => {
+	  eachObject((key, value) => target[key] = value, source);
 	  return target;
 	};
 
-	function connectToStores(Spec) {
-	  var Component = arguments[1] === undefined ? Spec : arguments[1];
-	  return (function () {
-	    // Check for required static methods.
-	    if (!isFunction(Spec.getStores)) {
-	      throw new Error('connectToStores() expects the wrapped component to have a static getStores() method');
-	    }
-	    if (!isFunction(Spec.getPropsFromStores)) {
-	      throw new Error('connectToStores() expects the wrapped component to have a static getPropsFromStores() method');
-	    }
+	function connectToStores(Spec, Component = Spec) {
+	  // Check for required static methods.
+	  if (!isFunction(Spec.getStores)) {
+	    throw new Error('connectToStores() expects the wrapped component to have a static getStores() method');
+	  }
+	  if (!isFunction(Spec.getPropsFromStores)) {
+	    throw new Error('connectToStores() expects the wrapped component to have a static getPropsFromStores() method');
+	  }
 
-	    var StoreConnection = _react2['default'].createClass({
-	      displayName: 'StoreConnection',
+	  const StoreConnection = createReactClass({
+	    displayName: 'StoreConnection',
 
-	      getInitialState: function getInitialState() {
-	        return Spec.getPropsFromStores(this.props, this.context);
-	      },
+	    getInitialState() {
+	      return Spec.getPropsFromStores(this.props, this.context);
+	    },
 
-	      componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	        this.setState(Spec.getPropsFromStores(nextProps, this.context));
-	      },
+	    componentWillReceiveProps(nextProps) {
+	      this.setState(Spec.getPropsFromStores(nextProps, this.context));
+	    },
 
-	      componentDidMount: function componentDidMount() {
-	        var _this = this;
-
-	        var stores = Spec.getStores(this.props, this.context);
-	        this.storeListeners = stores.map(function (store) {
-	          return store.listen(_this.onChange);
-	        });
-	        if (Spec.componentDidConnect) {
-	          Spec.componentDidConnect(this.props, this.context);
-	        }
-	      },
-
-	      componentWillUnmount: function componentWillUnmount() {
-	        this.storeListeners.forEach(function (unlisten) {
-	          return unlisten();
-	        });
-	      },
-
-	      onChange: function onChange() {
-	        this.setState(Spec.getPropsFromStores(this.props, this.context));
-	      },
-
-	      render: function render() {
-	        return _react2['default'].createElement(Component, assign({}, this.props, this.state));
+	    componentDidMount() {
+	      const stores = Spec.getStores(this.props, this.context);
+	      this.storeListeners = stores.map(store => {
+	        return store.listen(this.onChange);
+	      });
+	      if (Spec.componentDidConnect) {
+	        Spec.componentDidConnect(this.props, this.context);
 	      }
-	    });
+	    },
 
-	    return StoreConnection;
-	  })();
+	    componentWillUnmount() {
+	      this.storeListeners.forEach(unlisten => unlisten());
+	    },
+
+	    onChange() {
+	      this.setState(Spec.getPropsFromStores(this.props, this.context));
+	    },
+
+	    render() {
+	      return React.createElement(Component, assign({}, this.props, this.state));
+	    }
+	  });
+
+	  return StoreConnection;
 	}
 
-	exports['default'] = connectToStores;
-	module.exports = exports['default'];
+	export default connectToStores;
 
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
-
-/***/ }
+/***/ })
 /******/ ])
 });
 ;

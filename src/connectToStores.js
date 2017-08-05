@@ -1,5 +1,5 @@
 import React from 'react'
-import createReactClass from 'create-react-class';
+import createReactClass from 'create-react-class'
 
 // @todo Where to get these from?
 const isFunction = x => typeof x === 'function'
